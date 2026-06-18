@@ -1,3 +1,5 @@
+![Fork the Dictator — punch the tyrant, topple the regime](https://raw.githubusercontent.com/karam2022/fork-the-dictator/main/og.png)
+
 # 👊 FORK THE DICTATOR
 
 A tiny browser game you can fork in 60 seconds. Punch a cartoon tyrant until the
