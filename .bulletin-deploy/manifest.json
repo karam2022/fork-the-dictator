@@ -1,0 +1,244 @@
+{
+  "version": 3,
+  "previous_contenthash": null,
+  "deployed_at": "2026-06-18T13:31:27.807Z",
+  "framework": null,
+  "files": {
+    ".git/COMMIT_EDITMSG": {
+      "cid": "bafkreifaoooztk53apc2spzd4bzio5nlklniqetjs4jockthuwgqnyebrm",
+      "type": "volatile",
+      "size": 66
+    },
+    ".git/HEAD": {
+      "cid": "bafkreibi2jn7qkxuydrlol2qswnsx24fty7gboldbjpiyyb5vvg5wk3oqa",
+      "type": "volatile",
+      "size": 21
+    },
+    ".git/config": {
+      "cid": "bafkreid6mcxjwyere2eo73ydpq5chfykyq2vfjse452pdpybit4ptoxmwe",
+      "type": "volatile",
+      "size": 373
+    },
+    ".git/description": {
+      "cid": "bafkreiefvnwbmpkduf7ktt3xrayixsqum3y3bkgrzsjoe3u36y62ibrk5y",
+      "type": "volatile",
+      "size": 73
+    },
+    ".git/hooks/applypatch-msg.sample": {
+      "cid": "bafkreiacenexuc4lam5klcr2kinymkmgsodm66vq4lyqdfr5gkfkmimt64",
+      "type": "volatile",
+      "size": 478
+    },
+    ".git/hooks/commit-msg.sample": {
+      "cid": "bafkreia7otk6skjjpg2xh26vs5a5i3fzh7zzdlg5ba6tic4ug4dvhwjeg4",
+      "type": "volatile",
+      "size": 896
+    },
+    ".git/hooks/fsmonitor-watchman.sample": {
+      "cid": "bafkreihaksmwj2jys62rtpmogm6ag7sr77yprc5bhyegumyvsk7yah5b2a",
+      "type": "stable",
+      "size": 4726
+    },
+    ".git/hooks/post-update.sample": {
+      "cid": "bafkreieboznpfwxpgiygdxf4lzq7yfsids3uwo5mtlmkc5frqzjdlbxwyu",
+      "type": "stable",
+      "size": 189
+    },
+    ".git/hooks/pre-applypatch.sample": {
+      "cid": "bafkreihblrnunhvd4ctjlpvg6lecxt4omkbba5ettxoyln36aad76fsuou",
+      "type": "stable",
+      "size": 424
+    },
+    ".git/hooks/pre-commit.sample": {
+      "cid": "bafkreicxdbnxxhyfeooxvnjnwbc7loe6wmjurv5sc57kwikpl24hfymxdm",
+      "type": "stable",
+      "size": 1649
+    },
+    ".git/hooks/pre-merge-commit.sample": {
+      "cid": "bafkreigtqjnham3zidv32cs4a4uyjyjsiwjazx4itc6sexene6tn7solkm",
+      "type": "stable",
+      "size": 416
+    },
+    ".git/hooks/pre-push.sample": {
+      "cid": "bafkreihmz2oh4bgt6xoz3cw2qf2t3uovjguwgszgo4aefnmn3iacc7iini",
+      "type": "volatile",
+      "size": 1374
+    },
+    ".git/hooks/pre-rebase.sample": {
+      "cid": "bafkreicp5phim54qaurtqb3pjztmyr7pwfehtumas7i5mhecmgcz5kvhwm",
+      "type": "stable",
+      "size": 4898
+    },
+    ".git/hooks/pre-receive.sample": {
+      "cid": "bafkreifeypjltr53h7mncra4gg6u5zy2lfownncpz5e53myqeursafuzre",
+      "type": "stable",
+      "size": 544
+    },
+    ".git/hooks/prepare-commit-msg.sample": {
+      "cid": "bafkreihj3xfkige73xjf5wl7zddyt3fhw3fbmoileojk4mtw6deodksgde",
+      "type": "volatile",
+      "size": 1492
+    },
+    ".git/hooks/push-to-checkout.sample": {
+      "cid": "bafkreiffhuduc6mlfb6g3v5puzfo4rz7gbpglu7usrr3xhlubdwdwev7l4",
+      "type": "stable",
+      "size": 2783
+    },
+    ".git/hooks/sendemail-validate.sample": {
+      "cid": "bafkreice5p6jepofizv4aclaf4hm6bt3trsulgv75cdi3xcjw6hgz3l2si",
+      "type": "stable",
+      "size": 2308
+    },
+    ".git/hooks/update.sample": {
+      "cid": "bafkreienl4x2qpqqhtyiwv7kuz2sdx4rst2fzpn4wn62kkwvqyexufgray",
+      "type": "volatile",
+      "size": 3650
+    },
+    ".git/index": {
+      "cid": "bafkreiertusyghmvrd2mjvizlhwmvpiaozdmmrqx7cwn3iu3loh7gbgsny",
+      "type": "volatile",
+      "size": 297
+    },
+    ".git/info/exclude": {
+      "cid": "bafkreidgoh7ihn5apsetf3ujczgr6j4twiyyawhlromnyxag5yffuoyoye",
+      "type": "volatile",
+      "size": 240
+    },
+    ".git/logs/HEAD": {
+      "cid": "bafkreidlmgewxrrppvwgb7esop3igerppstkprrvuwrfiw2xivn2sgtbzu",
+      "type": "volatile",
+      "size": 218
+    },
+    ".git/logs/refs/heads/main": {
+      "cid": "bafkreidlmgewxrrppvwgb7esop3igerppstkprrvuwrfiw2xivn2sgtbzu",
+      "type": "volatile",
+      "size": 218
+    },
+    ".git/logs/refs/remotes/origin/main": {
+      "cid": "bafkreie76gwkjkpty4h65u2kgrmv2oat2y2kuhhedurwwq2dmzdy2jisoq",
+      "type": "volatile",
+      "size": 149
+    },
+    ".git/objects/9e/b51aced6a9aeacd6bd92b6787665fdbd1fe766": {
+      "cid": "bafkreieg4l3gedalruc3ump3zff7woypipqnsq3byiisar7j5mgmqyqzlm",
+      "type": "volatile",
+      "size": 1064
+    },
+    ".git/objects/a5/002e89074578d49ec32fe4a634175cc5adaf24": {
+      "cid": "bafkreib3vkbdtbwj3h3u4ktn7ebehiv33zbysabtwcpdywh34pxfkvpbvy",
+      "type": "volatile",
+      "size": 165
+    },
+    ".git/objects/d7/23d1b93d08eb572d69e61486c214359b52e6a9": {
+      "cid": "bafkreibvmsmeakwm4727atitbvzrimaqnfvjk4u2fwe3i4otgeyscjovja",
+      "type": "volatile",
+      "size": 11122
+    },
+    ".git/objects/e4/3b0f988953ae3a84b00331d0ccf5f7d51cb3cf": {
+      "cid": "bafkreih4xgewjigphnusawrqhxxejuof3umm5agtarl7kkjpwgm4vroj5q",
+      "type": "volatile",
+      "size": 26
+    },
+    ".git/objects/ed/e9958bba38459f3b7cef5bf90d8fbde6975a5e": {
+      "cid": "bafkreib6ii6ok7mswfm6hb5ekgl74s6j5fjefljtntpq2sx3yqhyyuew2u",
+      "type": "volatile",
+      "size": 124
+    },
+    ".git/refs/heads/main": {
+      "cid": "bafkreiad4iqfxebhf3l2cqrowalpg5eff5j7j4aoaxyvocl4fiaf2nyeti",
+      "type": "volatile",
+      "size": 41
+    },
+    ".git/refs/remotes/origin/main": {
+      "cid": "bafkreiad4iqfxebhf3l2cqrowalpg5eff5j7j4aoaxyvocl4fiaf2nyeti",
+      "type": "volatile",
+      "size": 41
+    },
+    ".gitignore": {
+      "cid": "bafkreigpen6hv72e567g4ubomrod4bw2aotj2666wqzzeeeo6m2icq2bpy",
+      "type": "volatile",
+      "size": 10
+    },
+    "README.md": {
+      "cid": "bafkreig7lnlaycgdfebyylr4zjinsyqlz4xnh3lrc4gextglfjmrb3gipu",
+      "type": "volatile",
+      "size": 1685
+    },
+    "index.html": {
+      "cid": "bafkreigz3cyigxljusxh3bl4z4n6gxrxejob7ch4w5bl2dyppdcqlwrgga",
+      "type": "volatile",
+      "size": 28530
+    }
+  },
+  "stableBlockOrder": [
+    "bafkreicp5phim54qaurtqb3pjztmyr7pwfehtumas7i5mhecmgcz5kvhwm",
+    "bafkreihaksmwj2jys62rtpmogm6ag7sr77yprc5bhyegumyvsk7yah5b2a",
+    "bafkreiffhuduc6mlfb6g3v5puzfo4rz7gbpglu7usrr3xhlubdwdwev7l4",
+    "bafkreice5p6jepofizv4aclaf4hm6bt3trsulgv75cdi3xcjw6hgz3l2si",
+    "bafkreicxdbnxxhyfeooxvnjnwbc7loe6wmjurv5sc57kwikpl24hfymxdm",
+    "bafkreifeypjltr53h7mncra4gg6u5zy2lfownncpz5e53myqeursafuzre",
+    "bafkreihblrnunhvd4ctjlpvg6lecxt4omkbba5ettxoyln36aad76fsuou",
+    "bafkreigtqjnham3zidv32cs4a4uyjyjsiwjazx4itc6sexene6tn7solkm",
+    "bafkreieboznpfwxpgiygdxf4lzq7yfsids3uwo5mtlmkc5frqzjdlbxwyu"
+  ],
+  "blocks": [
+    "bafybeicqg26a4jnki7ssve6jgpcdou5lbgkbpo6fp6r27hdxddd5ntluui",
+    "bafybeieh6ebo6yziqmj6wbpckm4qycjcqsa6teln2jmgq3panvubjo5j3a",
+    "bafkreibsx5ajr4rtub3srw455cyrjjimibn2mj6tn7r2gtgkde6ka67jwa",
+    "bafybeigtxgx4f3ajpexc4h2txcnf3w2lwmrfo33xpzp4pky6fihbwayapu",
+    "bafkreifaoooztk53apc2spzd4bzio5nlklniqetjs4jockthuwgqnyebrm",
+    "bafkreibi2jn7qkxuydrlol2qswnsx24fty7gboldbjpiyyb5vvg5wk3oqa",
+    "bafkreid6mcxjwyere2eo73ydpq5chfykyq2vfjse452pdpybit4ptoxmwe",
+    "bafkreiefvnwbmpkduf7ktt3xrayixsqum3y3bkgrzsjoe3u36y62ibrk5y",
+    "bafybeib5gygozg6xm4u4t7gg4b35rnjie6gzn4t2ssvif2qeusfg7tk7su",
+    "bafkreiacenexuc4lam5klcr2kinymkmgsodm66vq4lyqdfr5gkfkmimt64",
+    "bafkreia7otk6skjjpg2xh26vs5a5i3fzh7zzdlg5ba6tic4ug4dvhwjeg4",
+    "bafkreihaksmwj2jys62rtpmogm6ag7sr77yprc5bhyegumyvsk7yah5b2a",
+    "bafkreieboznpfwxpgiygdxf4lzq7yfsids3uwo5mtlmkc5frqzjdlbxwyu",
+    "bafkreihblrnunhvd4ctjlpvg6lecxt4omkbba5ettxoyln36aad76fsuou",
+    "bafkreicxdbnxxhyfeooxvnjnwbc7loe6wmjurv5sc57kwikpl24hfymxdm",
+    "bafkreigtqjnham3zidv32cs4a4uyjyjsiwjazx4itc6sexene6tn7solkm",
+    "bafkreihmz2oh4bgt6xoz3cw2qf2t3uovjguwgszgo4aefnmn3iacc7iini",
+    "bafkreicp5phim54qaurtqb3pjztmyr7pwfehtumas7i5mhecmgcz5kvhwm",
+    "bafkreifeypjltr53h7mncra4gg6u5zy2lfownncpz5e53myqeursafuzre",
+    "bafkreihj3xfkige73xjf5wl7zddyt3fhw3fbmoileojk4mtw6deodksgde",
+    "bafkreiffhuduc6mlfb6g3v5puzfo4rz7gbpglu7usrr3xhlubdwdwev7l4",
+    "bafkreice5p6jepofizv4aclaf4hm6bt3trsulgv75cdi3xcjw6hgz3l2si",
+    "bafkreienl4x2qpqqhtyiwv7kuz2sdx4rst2fzpn4wn62kkwvqyexufgray",
+    "bafkreiertusyghmvrd2mjvizlhwmvpiaozdmmrqx7cwn3iu3loh7gbgsny",
+    "bafybeicd2ag66vwstg43idy7uk6apwlw3q77rdavifkn7vemjyhbu7egiu",
+    "bafkreidgoh7ihn5apsetf3ujczgr6j4twiyyawhlromnyxag5yffuoyoye",
+    "bafybeiaamxaeay5rxlorp4gmdziyldt2p2uif2gk3um3ftufsclqpzf3ca",
+    "bafkreidlmgewxrrppvwgb7esop3igerppstkprrvuwrfiw2xivn2sgtbzu",
+    "bafybeifbi4xaiddeubtvvjpjn7rcdxcbxqif5memywm7pdk6kospgp4hqa",
+    "bafybeici2vkomss2gwz3pygwe6bcyop32lrtpitmhg7tefrzlt73heubn4",
+    "bafybeidyqxmeelnc7jrb2ld6hc55o5gashwyw3eyduftvmoh37xen24zqa",
+    "bafybeiewvuxmpwgyptgpzrxonprraslxxzblbhia45d5vi75h574m4fgem",
+    "bafkreie76gwkjkpty4h65u2kgrmv2oat2y2kuhhedurwwq2dmzdy2jisoq",
+    "bafybeigm5x2gim5di3tzinvxv2dg6yrowritosdxzhcodeaq247jmavphm",
+    "bafybeidjqfr7hhkdy4ejbwmtn2vsxkwf3db52hvh3nfdxfqie63ri7p5wa",
+    "bafkreieg4l3gedalruc3ump3zff7woypipqnsq3byiisar7j5mgmqyqzlm",
+    "bafybeibwjntdx4cusdhzgvvbecyfd5ynbbm4syaqrkdhpulxfljjtx3ey4",
+    "bafkreib3vkbdtbwj3h3u4ktn7ebehiv33zbysabtwcpdywh34pxfkvpbvy",
+    "bafybeieomvnqg3bxfyq5dfbif5tbzs5nklqqx7kjx5b6d53fdd6a3pfbhi",
+    "bafkreibvmsmeakwm4727atitbvzrimaqnfvjk4u2fwe3i4otgeyscjovja",
+    "bafybeid3pquia5fo6rmnv7e6wtc3vmqsjvuctq5qig3gj52rrfnyi3fhse",
+    "bafkreih4xgewjigphnusawrqhxxejuof3umm5agtarl7kkjpwgm4vroj5q",
+    "bafybeihnfo35lrstwg3o6skirrxi6saf3dtnhlrhsvbmjigexspexnooxi",
+    "bafkreib6ii6ok7mswfm6hb5ekgl74s6j5fjefljtntpq2sx3yqhyyuew2u",
+    "bafybeiczsscdsbs7ffqz55asqdf3smv6klcw3gofszvwlyarci47bgf354",
+    "bafybeihxjfna5wssbjfvsrbs5uo4yzfu5gtwufn4k6ziebcayyawb46d4a",
+    "bafybeihkeehklbc6ouu37mvlhoz23gqfczur6rzjqyj6wd3nzqqq7cuqcy",
+    "bafkreiad4iqfxebhf3l2cqrowalpg5eff5j7j4aoaxyvocl4fiaf2nyeti",
+    "bafybeieyq3rqc7nq72uw362cvyajbdaieam6fpon7yfbdicdvd4ywitxfu",
+    "bafkreigpen6hv72e567g4ubomrod4bw2aotj2666wqzzeeeo6m2icq2bpy",
+    "bafkreig7lnlaycgdfebyylr4zjinsyqlz4xnh3lrc4gextglfjmrb3gipu",
+    "bafkreigz3cyigxljusxh3bl4z4n6gxrxejob7ch4w5bl2dyppdcqlwrgga"
+  ],
+  "chunks": {
+    "bafkreifxaplw4ozmy7oekthagct7o4tqzh246aiftwxcdtavg4pzi73rqi": {
+      "size": 18279,
+      "deployed_at": "2026-06-18T13:31:27.807Z"
+    }
+  }
+}
