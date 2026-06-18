@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>FORK THE DICTATOR</title>
+<style>
+  /* ---------- Theme (swapped per level to recolor the tyrant) ---------- */
+  :root{
+    --bg:#0b0d12; --bg2:#11141c; --ink:#f4f1e8; --muted:#9aa0ad;
+    --gold:#f5c542; --blood:#e23b2e; --green:#37d67a;
+    --uniform:#3a4a3f; --uniform-dark:#2a362e; --skin:#e8b98f; --cap:#22281f;
+    --accent:#f5c542;
+    --shake:0px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%;}
+  body{
+    background:radial-gradient(1200px 800px at 50% -10%, var(--bg2), var(--bg));
+    color:var(--ink); font-family:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    overflow:hidden; user-select:none; touch-action:manipulation;
+  }
+  /* screen-shake wrapper */
+  #stage{position:fixed; inset:0; transform:translate(var(--shake),0); display:flex; flex-direction:column;}
+
+  /* ---------- Top bar: HP + level ---------- */
+  header{padding:14px 20px 6px; display:flex; align-items:center; gap:16px;}
+  .title{font-weight:800; letter-spacing:.5px; font-size:18px; white-space:nowrap;}
+  .title b{color:var(--blood);}
+  .title span{color:var(--gold);}
+  .hpwrap{flex:1; min-width:120px;}
+  .hplabel{display:flex; justify-content:space-between; font-size:11px; color:var(--muted);
+           text-transform:uppercase; letter-spacing:.12em; margin-bottom:4px;}
+  .hpbar{height:16px; border:1px solid #2a2f3a; border-radius:99px; background:#070a0f; overflow:hidden; position:relative;}
+  .hpfill{height:100%; width:100%; border-radius:99px;
+          background:linear-gradient(90deg,var(--green),#cfe34a,var(--gold),var(--blood));
+          background-size:300% 100%; background-position:0% 0; transition:width .12s ease;}
+  .lvl{font-size:12px; color:var(--muted); white-space:nowrap;}
+  .lvl b{color:var(--ink); font-size:15px;}
+
+  /* ---------- Main layout ---------- */
+  main{flex:1; display:flex; min-height:0;}
+  .arena{flex:1; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .floor{position:absolute; left:0; right:0; bottom:0; height:30%;
+         background:linear-gradient(180deg, transparent, rgba(0,0,0,.5));}
+
+  /* tyrant + nameplate */
+  #tyrantWrap{position:relative; cursor:pointer; transform-origin:50% 92%; will-change:transform; filter:drop-shadow(0 24px 30px rgba(0,0,0,.55));}
+  #tyrantSvg{width:min(48vh,360px); height:auto; display:block; will-change:transform;}
+  .nameplate{position:absolute; left:50%; bottom:-46px; transform:translateX(-50%);
+             background:#1a1f2a; border:1px solid #2c3340; border-radius:8px; padding:7px 14px;
+             font-weight:700; letter-spacing:.04em; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,.4);}
+  .nameplate small{display:block; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.18em; font-weight:600;}
+  .nameplate .who{color:var(--gold); font-size:16px;}
+  .renamebtn{margin-left:8px; background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px;}
+  .renamebtn:hover{color:var(--ink);}
+
+  .hint{position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+        color:var(--muted); font-size:13px; letter-spacing:.04em; text-align:center; animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+  /* combo + damage popups */
+  .combo{position:absolute; top:18%; left:50%; transform:translateX(-50%); font-weight:900;
+         font-size:30px; color:var(--gold); text-shadow:0 2px 0 #000,0 0 22px rgba(245,197,66,.6);
+         opacity:0; pointer-events:none;}
+  .pop{position:absolute; font-weight:900; pointer-events:none; will-change:transform,opacity;}
+  .pop.dmg{color:#fff; font-size:22px; text-shadow:0 2px 0 #000;}
+  .pop.word{font-size:clamp(34px,7vw,72px); color:var(--gold); -webkit-text-stroke:3px #000; text-stroke:3px #000;}
+  .glove{position:absolute; font-size:64px; pointer-events:none; will-change:transform,opacity;}
+
+  /* ---------- Sidebar: leaderboard ---------- */
+  aside{width:260px; background:linear-gradient(180deg,#0e1118,#0b0d12); border-left:1px solid #1c2230;
+        padding:16px 14px; display:flex; flex-direction:column; gap:10px;}
+  .board-h{font-size:11px; text-transform:uppercase; letter-spacing:.18em; color:var(--muted);}
+  .board-h b{color:var(--gold);}
+  #board{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; overflow:auto;}
+  #board li{display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:8px; background:#10141d; font-size:13px;}
+  #board li.you{background:#1b2533; outline:1px solid var(--gold);}
+  #board .rank{width:20px; color:var(--muted); font-weight:700; text-align:center;}
+  #board .nm{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  #board .ct{font-weight:800; color:var(--gold);}
+  .badge{font-size:10px; padding:3px 8px; border-radius:99px; align-self:flex-start; letter-spacing:.1em; text-transform:uppercase; font-weight:700;}
+  .badge.mock{background:#3a2a10; color:var(--gold);}
+  .badge.live{background:#0f3320; color:var(--green);}
+  .connect{margin-top:auto; display:flex; flex-direction:column; gap:8px;}
+  .me{font-size:12px; color:var(--muted);} .me b{color:var(--ink);}
+  button.cta{font:inherit; font-weight:800; letter-spacing:.03em; cursor:pointer; border:none; border-radius:10px;
+             padding:11px 14px; background:var(--gold); color:#1a1300;}
+  button.cta.ghost{background:#161b25; color:var(--ink); border:1px solid #2a3140;}
+  button.cta:active{transform:translateY(1px);}
+
+  /* ---------- Topple / victory overlay ---------- */
+  #flash{position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:40;}
+  #victory{position:fixed; inset:0; z-index:50; display:none; flex-direction:column; align-items:center; justify-content:center;
+           text-align:center; background:radial-gradient(circle at 50% 40%, rgba(0,0,0,.2), rgba(0,0,0,.82)); }
+  #victory.show{display:flex; animation:vfade .25s ease;}
+  @keyframes vfade{from{opacity:0}to{opacity:1}}
+  #victory h1{font-size:clamp(34px,8vw,86px); margin:0; color:var(--gold); -webkit-text-stroke:2px #000;
+              text-shadow:0 0 40px rgba(245,197,66,.5);}
+  #victory p{font-size:clamp(14px,2.5vw,20px); color:var(--ink); max-width:600px; margin:14px 24px 0;}
+  #victory p b{color:var(--green);}
+  #confetti{position:fixed; inset:0; z-index:49; pointer-events:none;}
+
+  @media (max-width:680px){
+    aside{position:fixed; right:0; top:0; bottom:0; width:78%; transform:translateX(100%); transition:transform .25s; z-index:30;}
+    aside.open{transform:none;}
+    .boardToggle{position:fixed; top:12px; right:12px; z-index:31;}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <header>
+    <div class="title"><b>FORK</b> THE <span>DICTATOR</span></div>
+    <div class="hpwrap">
+      <div class="hplabel"><span>Regime integrity</span><span id="hptext">100%</span></div>
+      <div class="hpbar"><div class="hpfill" id="hpfill"></div></div>
+    </div>
+    <div class="lvl">Regime&nbsp;<b id="lvl">1</b></div>
+  </header>
+
+  <main>
+    <section class="arena" id="arena">
+      <div class="floor"></div>
+
+      <div id="tyrantWrap" title="Punch (click / tap / spacebar)">
+        <!-- Original cartoon despot. No real likeness. Parts are id'd so JS can react. -->
+        <svg id="tyrantSvg" viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- medals on chest -->
+          <g id="body">
+            <path d="M60 300 L60 180 Q120 150 180 180 L180 300 Z" fill="var(--uniform)"/>
+            <path d="M60 300 L60 180 Q90 165 120 165 L120 300 Z" fill="var(--uniform-dark)" opacity=".5"/>
+            <!-- sash -->
+            <path d="M70 168 L150 300 L176 300 L96 162 Z" fill="var(--blood)"/>
+            <g id="medals">
+              <circle cx="92" cy="210" r="9" fill="var(--gold)" stroke="#000" stroke-width="1.5"/>
+              <circle cx="112" cy="222" r="7" fill="#dfe3ea" stroke="#000" stroke-width="1.5"/>
+              <rect x="80" y="232" width="16" height="10" rx="2" fill="var(--gold)" stroke="#000" stroke-width="1.5"/>
+            </g>
+            <!-- epaulettes -->
+            <rect x="52" y="176" width="26" height="14" rx="4" fill="var(--gold)" stroke="#000" stroke-width="1.5"/>
+            <rect x="162" y="176" width="26" height="14" rx="4" fill="var(--gold)" stroke="#000" stroke-width="1.5"/>
+          </g>
+
+          <!-- head -->
+          <g id="head">
+            <ellipse id="face" cx="120" cy="118" rx="58" ry="62" fill="var(--skin)" stroke="#000" stroke-width="2"/>
+            <!-- ears -->
+            <circle cx="62" cy="120" r="10" fill="var(--skin)" stroke="#000" stroke-width="2"/>
+            <circle cx="178" cy="120" r="10" fill="var(--skin)" stroke="#000" stroke-width="2"/>
+
+            <!-- brows (anger) -->
+            <path id="browL" d="M92 96 L112 104" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+            <path id="browR" d="M148 96 L128 104" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+
+            <!-- eyes -->
+            <g id="eyes">
+              <circle cx="102" cy="116" r="9" fill="#fff" stroke="#000" stroke-width="1.5"/>
+              <circle cx="138" cy="116" r="9" fill="#fff" stroke="#000" stroke-width="1.5"/>
+              <circle id="pupilL" cx="102" cy="117" r="4" fill="#000"/>
+              <circle id="pupilR" cx="138" cy="117" r="4" fill="#000"/>
+            </g>
+            <!-- black eye (grows with damage) -->
+            <circle id="blackEye" cx="138" cy="116" r="13" fill="#5b3fb0" opacity="0"/>
+
+            <!-- mustache -->
+            <path id="mustache" d="M104 140 Q120 150 136 140 Q120 146 104 140 Z" fill="#3a2a1a" stroke="#000" stroke-width="1"/>
+            <!-- mouth (smug by default; JS swaps d) -->
+            <path id="mouth" d="M104 152 Q120 158 136 152" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+
+            <!-- sweat (hidden until hurt) -->
+            <g id="sweat" opacity="0">
+              <path d="M168 96 q6 14 0 20 q-6 -6 0 -20Z" fill="#7fd3ff" stroke="#3aa" stroke-width="1"/>
+              <path d="M70 92 q6 14 0 20 q-6 -6 0 -20Z" fill="#7fd3ff" stroke="#3aa" stroke-width="1"/>
+            </g>
+          </g>
+
+          <!-- ridiculous oversized cap -->
+          <g id="cap">
+            <path d="M60 78 Q120 38 180 78 L180 86 Q120 70 60 86 Z" fill="var(--cap)" stroke="#000" stroke-width="2"/>
+            <rect x="58" y="84" width="124" height="14" rx="4" fill="#1a1f17" stroke="#000" stroke-width="2"/>
+            <!-- gold braid -->
+            <rect x="58" y="92" width="124" height="6" fill="var(--gold)"/>
+            <!-- emblem -->
+            <circle cx="120" cy="64" r="11" fill="var(--gold)" stroke="#000" stroke-width="2"/>
+            <path id="emblem" d="M120 57 l2.5 5 5.5 .5 -4 4 1.2 5.5 -5.2 -3 -5.2 3 1.2 -5.5 -4 -4 5.5 -.5Z" fill="#1a1300"/>
+          </g>
+        </svg>
+
+        <div class="nameplate">
+          <small>His excellency</small>
+          <span class="who" id="who">GENERALISSIMO MUSTACHIO</span>
+          <button class="renamebtn" id="renameBtn" title="Whose face is this?">✎</button>
+        </div>
+      </div>
+
+      <div class="combo" id="combo"></div>
+      <div class="hint" id="hint">Punch him. Click, tap, or mash SPACEBAR.</div>
+    </section>
+
+    <aside id="board-side">
+      <div class="board-h">🔥 Top <b>Revolutionaries</b></div>
+      <ul id="board"></ul>
+      <span class="badge mock" id="modeBadge">● Local demo · fork me to go multiplayer</span>
+      <div class="connect">
+        <div class="me" id="meLine">Playing as <b>guest</b></div>
+        <button class="cta" id="connectBtn">Connect wallet</button>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<button class="cta ghost boardToggle" id="boardToggle" style="display:none">🏆</button>
+<div id="flash"></div>
+<canvas id="confetti"></canvas>
+<div id="victory">
+  <h1 id="victoryTitle">THE REGIME HAS FALLEN</h1>
+  <p>Forked. Recorded on-chain. <b>Unerasable.</b><br/>A new regime is rising…</p>
+</div>
+
+<script>
+/* =========================================================================
+   FORK THE DICTATOR  —  Playground.dot / Web3 Summit build
+   -------------------------------------------------------------------------
+   The whole booth punches ONE shared on-chain tyrant. Each punch is a signed
+   tx that drops the regime's HP and credits your .dot name. HP hits zero ->
+   the statue topples, a new (sillier) regime rises. Top Revolutionaries win.
+
+   This file runs standalone in MOCK MODE (double-click to demo). To go live,
+   fill in the four methods in Chain.live below with the Product SDK calls
+   and your deployed contract address/ABI. Nothing else needs to change.
+   ========================================================================= */
+
+/* ----------------------------- Chain adapter ----------------------------- *
+   The ONLY thing the game knows about the blockchain. Swap MODE to 'live'
+   after you wire Chain.live at the booth.                                    */
+const MODE = 'mock';            // <-- flip to 'live' once Chain.live is wired
+
+const Chain = {
+  /* MOCK: fully playable offline. Local state + a lively fake leaderboard. */
+  mock: (() => {
+    const fakeNames = ['alice.dot','bob.dot','satoshi.dot','che.dot','rosa.dot','anon.dot','spartacus.dot','vaclav.dot'];
+    let state = {
+      level: 1,
+      maxHealth: 50,
+      health: 50,
+      me: null,
+      board: fakeNames.map(n => ({ name:n, hits: 3 + Math.floor(Math.random()*22) }))
+    };
+    const listeners = [];
+    const emit = () => listeners.forEach(cb => cb(snapshot()));
+    const snapshot = () => ({ ...state, board: state.board.map(r => ({...r})) });
+
+    // fake comrades keep punching so the board feels alive
+    setInterval(() => {
+      const r = state.board[Math.floor(Math.random()*state.board.length)];
+      const inc = 1 + Math.floor(Math.random()*3);
+      r.hits += inc;
+      if (state.health > 0){ state.health = Math.max(0, state.health - inc); if (state.health===0) topple(); }
+      emit();
+    }, 1400);
+
+    function topple(){
+      state.level += 1;
+      state.maxHealth = Math.round(40 + state.level*30);
+      state.health = state.maxHealth;
+    }
+    return {
+      async connect(){
+        const name = (prompt('Enter your .dot handle (mock):','rebel.dot') || 'you.dot').trim();
+        state.me = name;
+        if (!state.board.find(r => r.name===name)) state.board.push({ name, hits:0 });
+        emit(); return { name, address:'mock' };
+      },
+      async getState(){ return snapshot(); },
+      async punch(dmg){
+        if (!state.me){ state.me='you.dot'; if(!state.board.find(r=>r.name==='you.dot')) state.board.push({name:'you.dot',hits:0}); }
+        const wasZero = state.health<=0;
+        state.health = Math.max(0, state.health - dmg);
+        const row = state.board.find(r => r.name===state.me); if (row) row.hits += dmg;
+        const toppled = state.health===0 && !wasZero;
+        if (toppled) topple();
+        emit();
+        return { toppled, snapshot: snapshot() };
+      },
+      subscribe(cb){ listeners.push(cb); }
+    };
+  })(),
+
+  /* LIVE: wire these 4 methods at the booth. The Solidity contract you deploy
+     in RevX (spec is in the README I gave you) exposes:
+        function punch() external                       // -1 HP, credits msg.sender, may emit Toppled
+        function health() external view returns (uint)
+        function maxHealth() external view returns (uint)
+        function level() external view returns (uint)
+        function topHitters() external view returns (address[], uint[])   // or read an event log
+     Identity: resolve msg.sender -> .dot name via the Product SDK name service.
+     ----------------------------------------------------------------------- */
+  live: {
+    _sdk:null, _contract:null, _me:null, _cbs:[],
+    // TODO(booth): import the Product SDK, connect wallet, read the .dot identity.
+    async connect(){
+      // const { connect, resolveName } = await import('@polkadot/product-sdk'); // confirm pkg name at booth
+      // this._sdk = await connect();
+      // const addr = this._sdk.account.address;
+      // this._me  = await resolveName(addr) || addr;          // .dot name for the leaderboard
+      // this._contract = this._sdk.contract(CONTRACT_ADDRESS, CONTRACT_ABI);
+      // this._contract.on('Toppled', () => this._refresh());
+      // this._contract.on('Punched', () => this._refresh());
+      throw new Error('Chain.live.connect not wired yet — see README');
+    },
+    async getState(){
+      // const [h,mh,lv] = await Promise.all([this._contract.health(), this._contract.maxHealth(), this._contract.level()]);
+      // const [addrs,hits] = await this._contract.topHitters();
+      // const board = addrs.map((a,i)=>({ name:a, hits:Number(hits[i]) }));   // map addr->.dot name where possible
+      // return { level:Number(lv), maxHealth:Number(mh), health:Number(h), me:this._me, board };
+    },
+    async punch(dmg){
+      // await this._contract.punch();           // one signed tx == one canonical punch (contract enforces dmg)
+      // const snap = await this.getState();
+      // const toppled = snap.health===0;         // or detect via the Toppled event
+      // return { toppled, snapshot:snap };
+    },
+    subscribe(cb){ this._cbs.push(cb); },
+    async _refresh(){ const s = await this.getState(); this._cbs.forEach(cb=>cb(s)); }
+  }
+};
+const chain = Chain[MODE];
+
+/* ----------------------------- Game / UI ----------------------------- */
+const $ = id => document.getElementById(id);
+const arena = $('arena'), wrap = $('tyrantWrap'), svg = $('tyrantSvg');
+const hpfill = $('hpfill'), hptext = $('hptext'), lvlEl = $('lvl');
+const boardEl = $('board'), comboEl = $('combo'), hint = $('hint');
+const whoEl = $('who'), flash = $('flash'), victory = $('victory'), victoryTitle = $('victoryTitle');
+
+const WORDS = ['POW!','BAM!','BONK!','OOF!','WHACK!','KAPOW!','THWACK!','SMACK!'];
+const PALETTES = [ /* recolor the regime each level */
+  {uniform:'#3a4a3f',dark:'#2a362e',cap:'#22281f',skin:'#e8b98f'},
+  {uniform:'#4a3a55',dark:'#332640',cap:'#2a1f33',skin:'#d9a878'},
+  {uniform:'#553a3a',dark:'#402626',cap:'#331f1f',skin:'#e8b98f'},
+  {uniform:'#3a4a55',dark:'#26333f',cap:'#1f2a33',skin:'#d6b08a'},
+];
+const TITLES = ['GENERALISSIMO','SUPREME LEADER','DEAR MARSHAL','PRESIDENT-FOR-LIFE','GRAND COMMANDANT','BELOVED FOUNDER'];
+const SURNAMES = ['MUSTACHIO','VON GREEDY','THE ETERNAL','GOLDENEPAULETTE','VAINGLORIUS','HIMSELFOVITCH'];
+
+let view = { level:1, health:1, maxHealth:1, me:null, board:[] };
+let combo = 0, lastHit = 0, comboTimer = null, audioCtx = null;
+let customName = null;       // BYO nameplate (client-side only)
+
+/* ---- render from chain state ---- */
+function render(s){
+  const leveledUp = s.level !== view.level;
+  view = s;
+  const pct = Math.max(0, Math.round((s.health / s.maxHealth) * 100));
+  hpfill.style.width = pct + '%';
+  hptext.textContent = pct + '%';
+  hpfill.style.backgroundPosition = (100 - pct) + '% 0';
+  lvlEl.textContent = s.level;
+  reactFace(pct);
+  if (leveledUp) applyPalette(s.level);
+  renderBoard(s);
+  $('meLine').innerHTML = s.me ? `Playing as <b>${escapeHtml(s.me)}</b>` : 'Playing as <b>guest</b>';
+}
+
+function renderBoard(s){
+  const rows = [...s.board].sort((a,b)=>b.hits-a.hits).slice(0,12);
+  boardEl.innerHTML = rows.map((r,i)=>`
+    <li class="${r.name===s.me?'you':''}">
+      <span class="rank">${i+1}</span>
+      <span class="nm">${escapeHtml(r.name)}</span>
+      <span class="ct">${r.hits}</span>
+    </li>`).join('');
+}
+
+/* ---- facial reactions by HP% ---- */
+const mouthSmug   = 'M104 152 Q120 158 136 152';
+const mouthWorried= 'M104 156 Q120 150 136 156';
+const mouthScream = 'M108 150 Q120 168 132 150 Q120 160 108 150 Z';
+function reactFace(pct){
+  const m = $('mouth'), be = $('blackEye'), sweat = $('sweat');
+  be.setAttribute('opacity', String(Math.min(0.9, (100-pct)/110)));
+  be.setAttribute('r', String(10 + (100-pct)/8));
+  sweat.setAttribute('opacity', pct<70 ? String(Math.min(1,(70-pct)/40)) : '0');
+  if (pct>66){ m.setAttribute('d',mouthSmug); m.setAttribute('fill','none'); }
+  else if (pct>30){ m.setAttribute('d',mouthWorried); m.setAttribute('fill','none'); }
+  else { m.setAttribute('d',mouthScream); m.setAttribute('fill','#7a1f1f'); }
+}
+
+function applyPalette(level){
+  const p = PALETTES[(level-1)%PALETTES.length];
+  document.documentElement.style.setProperty('--uniform',p.uniform);
+  document.documentElement.style.setProperty('--uniform-dark',p.dark);
+  document.documentElement.style.setProperty('--cap',p.cap);
+  document.documentElement.style.setProperty('--skin',p.skin);
+  if (!customName){
+    const t = TITLES[(level-1)%TITLES.length], s = SURNAMES[(level*3)%SURNAMES.length];
+    whoEl.textContent = `${t} ${s} ${'I'.repeat(((level-1)%3)+1)}`;
+  }
+}
+
+/* ---- the punch ---- */
+async function doPunch(clientX, clientY){
+  const now = performance.now();
+  combo = (now - lastHit < 650) ? combo+1 : 1;
+  lastHit = now;
+  const dmg = 1 + Math.floor(combo/5);   // mashing rewards a frenzy
+
+  // juice first (instant feedback), chain second
+  punchFx(clientX, clientY, dmg);
+  recoil();
+  shake(Math.min(14, 5+combo));
+  playPunch(combo);
+  showCombo();
+
+  const res = await chain.punch(dmg);
+  if (res && res.snapshot) render(res.snapshot);
+  if (res && res.toppled) celebrate();
+}
+
+function recoil(){
+  const dir = Math.random()<.5?-1:1;
+  svg.animate(
+    [{transform:'translate(0,0) rotate(0)'},
+     {transform:`translate(${dir*10}px,-6px) rotate(${dir*5}deg) scale(1.04,.96)`},
+     {transform:'translate(0,0) rotate(0)'}],
+    {duration:160, easing:'ease-out'});
+}
+function shake(px){
+  let t=0; const id=setInterval(()=>{
+    document.documentElement.style.setProperty('--shake',(Math.random()*2-1)*px+'px');
+    if(++t>6){clearInterval(id);document.documentElement.style.setProperty('--shake','0px');}
+  },18);
+}
+function punchFx(x,y,dmg){
+  const r = arena.getBoundingClientRect();
+  x = (x ?? r.left+r.width/2) - r.left; y = (y ?? r.top+r.height/2) - r.top;
+  // comic word
+  const w = document.createElement('div'); w.className='pop word';
+  w.textContent = WORDS[Math.floor(Math.random()*WORDS.length)];
+  w.style.left=x+'px'; w.style.top=y+'px';
+  arena.appendChild(w);
+  w.animate([{transform:'translate(-50%,-50%) scale(.3) rotate(-8deg)',opacity:1},
+             {transform:`translate(-50%,-120%) scale(1.2) rotate(${Math.random()*16-8}deg)`,opacity:0}],
+            {duration:520,easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=()=>w.remove();
+  // damage number
+  const d = document.createElement('div'); d.className='pop dmg'; d.textContent='-'+dmg;
+  d.style.left=(x+20)+'px'; d.style.top=y+'px'; arena.appendChild(d);
+  d.animate([{transform:'translate(0,0)',opacity:1},{transform:'translate(0,-46px)',opacity:0}],
+            {duration:600,easing:'ease-out'}).onfinish=()=>d.remove();
+  // flying glove from a random edge
+  const g = document.createElement('div'); g.className='glove'; g.textContent='👊';
+  const fromL = Math.random()<.5; g.style.left=(fromL?-60:r.width+60)+'px'; g.style.top=y+'px';
+  arena.appendChild(g);
+  g.animate([{transform:`translate(0,0) rotate(${fromL?0:180}deg)`,opacity:1},
+             {transform:`translate(${(x-(fromL?-60:r.width+60))}px,0) rotate(${fromL?0:180}deg)`,opacity:1},
+             {opacity:0}],{duration:200,easing:'ease-in'}).onfinish=()=>g.remove();
+}
+function showCombo(){
+  if (combo<3){ comboEl.style.opacity=0; return; }
+  comboEl.textContent = `x${combo} COMBO!`;
+  comboEl.animate([{opacity:0,transform:'translateX(-50%) scale(.6)'},
+                   {opacity:1,transform:'translateX(-50%) scale(1.15)'},
+                   {opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:240,fill:'forwards'});
+  clearTimeout(comboTimer); comboTimer=setTimeout(()=>comboEl.style.opacity=0,650);
+}
+
+/* ---- WebAudio punch (no assets) ---- */
+function playPunch(c){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+    // thud (noise burst)
+    const buf = audioCtx.createBuffer(1, 1500, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,3);
+    const noise=audioCtx.createBufferSource(); noise.buffer=buf;
+    const ng=audioCtx.createGain(); ng.gain.setValueAtTime(.5,t); ng.gain.exponentialRampToValueAtTime(.001,t+.18);
+    noise.connect(ng).connect(audioCtx.destination); noise.start(t);
+    // comedic boing
+    const o=audioCtx.createOscillator(), og=audioCtx.createGain();
+    o.type='triangle'; const base=150+Math.min(c,12)*18;
+    o.frequency.setValueAtTime(base+260,t); o.frequency.exponentialRampToValueAtTime(base,t+.16);
+    og.gain.setValueAtTime(.22,t); og.gain.exponentialRampToValueAtTime(.001,t+.2);
+    o.connect(og).connect(audioCtx.destination); o.start(t); o.stop(t+.22);
+  }catch(e){/* audio optional */}
+}
+
+/* ---- topple / victory ---- */
+function celebrate(){
+  flash.animate([{opacity:.9},{opacity:0}],{duration:500,easing:'ease-out'});
+  // statue fall
+  wrap.animate([{transform:'rotate(0)'},{transform:'rotate(8deg)'},{transform:'rotate(-92deg) translateY(40px)'}],
+               {duration:900,easing:'cubic-bezier(.6,0,.9,.4)',fill:'forwards'}).onfinish=()=>{
+    wrap.animate([{transform:'rotate(-92deg) translateY(40px)'},{transform:'rotate(0)'}],{duration:500,delay:1400,easing:'ease-out',fill:'forwards'});
+  };
+  victoryTitle.textContent = (view.level>4? 'ANOTHER ONE DOWN' : 'THE REGIME HAS FALLEN');
+  victory.classList.add('show');
+  confettiBurst();
+  setTimeout(()=>victory.classList.remove('show'), 2600);
+}
+
+/* ---- confetti ---- */
+const cv=$('confetti'); let cctx;
+function fitCanvas(){ cv.width=innerWidth; cv.height=innerHeight; }
+function confettiBurst(){
+  fitCanvas(); cctx = cctx||cv.getContext('2d');
+  const cols=['#f5c542','#e23b2e','#37d67a','#7fd3ff','#fff'];
+  const P=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight*0.4,
+    vx:(Math.random()*2-1)*8, vy:Math.random()*-12-3, g:.4+Math.random()*.3,
+    s:5+Math.random()*7, c:cols[Math.floor(Math.random()*cols.length)], a:1, r:Math.random()*6}));
+  let frames=0;
+  (function loop(){
+    cctx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.a-=.008; p.r+=.2;
+      cctx.globalAlpha=Math.max(0,p.a); cctx.fillStyle=p.c;
+      cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.r); cctx.fillRect(-p.s/2,-p.s/2,p.s,p.s); cctx.restore(); });
+    if(++frames<150) requestAnimationFrame(loop); else cctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+addEventListener('resize',fitCanvas);
+
+/* ---- input ---- */
+wrap.addEventListener('pointerdown', e=>{ e.preventDefault(); hideHint(); doPunch(e.clientX,e.clientY); });
+addEventListener('keydown', e=>{ if(e.code==='Space'){ e.preventDefault(); hideHint(); doPunch(); } });
+let hinted=false; function hideHint(){ if(!hinted){ hint.style.display='none'; hinted=true; } }
+
+/* ---- BYO nameplate (client-side only; app ships neutral) ---- */
+$('renameBtn').addEventListener('click', ()=>{
+  const v = prompt("Whose face is this? (stays on your screen only)", whoEl.textContent);
+  if (v && v.trim()){ customName = v.trim().toUpperCase(); whoEl.textContent = customName; }
+});
+
+/* ---- connect ---- */
+$('connectBtn').addEventListener('click', async ()=>{
+  try{ const me = await chain.connect(); $('connectBtn').textContent = '✓ '+(me.name||'connected'); }
+  catch(err){ alert(err.message); }
+});
+
+/* ---- mobile board toggle ---- */
+const bt=$('boardToggle'), side=$('board-side');
+function checkMobile(){ const m=innerWidth<=680; bt.style.display=m?'block':'none'; if(!m) side.classList.remove('open'); }
+bt.addEventListener('click',()=>side.classList.toggle('open'));
+addEventListener('resize',checkMobile); checkMobile();
+
+/* ---- mode badge ---- */
+const badge=$('modeBadge');
+if (MODE==='live'){ badge.className='badge live'; badge.textContent='● LIVE on Polkadot'; }
+
+/* ---- boot ---- */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+(async function init(){
+  applyPalette(1);
+  chain.subscribe(render);
+  render(await chain.getState());
+})();
+</script>
+</body>
+</html>
